@@ -34,18 +34,7 @@ if [ $# -lt 1 ]; then
   exit 1
 fi
 
-echo
-echo "This script will modify newsyslog.conf, syslog.conf and periodic.conf."
-echo "This script assumes that logging is currently set to /var/log, which is"
-echo "the default location."
-echo "This script will also remove /var/log and make /var/log a symlink to the"
-echo "directory that you provide."
-echo .
-echo -n "Would you like to continue? (y/n) "
-read -e CONTINUE
-test "$CONTINUE" != "y" && exit 1
-
-# Grab logging directory variable from command line
+# Grab variables from command line
 while test -n "$1"; do
   case "$1" in
     --directory|-d)
@@ -69,7 +58,12 @@ done
 mount -uw /
 
 if [ "$RESET" == "TRUE" ]; then
+  echo
   echo "Resetting to defaults..."
+  echo "Reset only works if you ran this script to change the log directory"
+  echo -n "Would you like to continue? (y/n) "
+  read -e RESETCONTINUE
+  test "$RESETCONTINUE" != "y" && exit 1
   /etc/rc.d/syslogd stop
   cp -f /conf/base/etc/newsyslog.conf.orig /conf/base/etc/newsyslog.conf
   cp -f /conf/base/etc/newsyslog.conf /etc/
@@ -87,6 +81,17 @@ if [ "$RESET" == "TRUE" ]; then
   echo "Logging environment returned to factory default."
   exit 0
 fi
+
+echo
+echo "This script will modify newsyslog.conf, syslog.conf and periodic.conf."
+echo "This script assumes that logging is currently set to /var/log, which is"
+echo "the default location."
+echo "This script will also remove /var/log and make /var/log a symlink to the"
+echo "directory that you provide."
+echo .
+echo -n "Would you like to continue? (y/n) "
+read -e CONTINUE
+test "$CONTINUE" != "y" && exit 1
 
 # Verify logging directory exists, if not, create it
 test -d "$LOGDIR"  || mkdir "$LOGDIR"
