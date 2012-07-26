@@ -24,8 +24,9 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 
 PROGNAME="${0##*/}"
-USAGE="$PROGNAME -d LOGGING_DIRECTORY"
+USAGE="Call the program like this: $PROGNAME -d <New_Log_Directory>"
 
+echo
 echo "This script will modify newsyslog.conf, syslog.conf and periodic.conf."
 echo "This script assumes that logging is currently set to /var/log, which is"
 echo "the default location."
@@ -37,6 +38,11 @@ read -e CONTINUE
 test "$CONTINUE" != "y" && exit 1
 
 # Grab logging directory variable from command line
+if [ $# -lt 1 ]; then
+  echo $USAGE
+  exit 1
+fi
+
 while test -n "$1"; do
   case "$1" in
     --directory|-d)
@@ -69,7 +75,8 @@ printf "weekly_output=\"$LOGDIR/weekly.log\"\n" >> /conf/base/etc/periodic.conf
 printf "monthly_output=\"$LOGDIR/monthly.log\"\n" >> /conf/base/etc/periodic.conf
 echo $LOGDIR | sed 's/\//\\\//g' > /tmp/escapedloggingdir
 ESCAPEDDIR=`cat /tmp/escapedloggingdir`
-/usr/bin/sed -i.orig "s/\/var\/log/$ESCAPEDDIR/" newsyslog.conf syslog.conf
+/usr/bin/sed -i.orig "s/\/var\/log/$ESCAPEDDIR/" /conf/base/etc/newsyslog.conf \
+/conf/base/etc/syslog.conf
 
 # Copy modified files to existing /
 cp -f /conf/base/etc/newsyslog.conf /etc/
@@ -84,6 +91,8 @@ cp -ai /var/log/* "$LOGDIR/"
 # Link /var/log to $LOGDIR
 rm -rf /var/log
 ln -s "$LOGDIR" /var/log
+rm -rf /conf/base/var/log
+ln -s "$LOGDIR" /conf/base/var/log
 
 # Start syslogd
 /etc/rc.d/syslogd start
