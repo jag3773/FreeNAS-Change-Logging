@@ -70,13 +70,18 @@ echo "Making changes to configuration files..."
 /etc/rc.d/syslogd stop
 
 # Modify appropriate files for logging
+cp /conf/base/etc/periodic.conf /conf/base/etc/periodic.conf.orig
+/usr/bin/grep "daily.log" || \
 printf "daily_output=\"$LOGDIR/daily.log\"\n" >> /conf/base/etc/periodic.conf
+/usr/bin/grep "weekly.log" || \
 printf "weekly_output=\"$LOGDIR/weekly.log\"\n" >> /conf/base/etc/periodic.conf
+/usr/bin/grep "monthly.log" || \
 printf "monthly_output=\"$LOGDIR/monthly.log\"\n" >> /conf/base/etc/periodic.conf
 echo $LOGDIR | sed 's/\//\\\//g' > /tmp/escapedloggingdir
 ESCAPEDDIR=`cat /tmp/escapedloggingdir`
 /usr/bin/sed -i.orig "s/\/var\/log/$ESCAPEDDIR/" /conf/base/etc/newsyslog.conf \
 /conf/base/etc/syslog.conf
+rm /tmp/escapedloggingdir
 
 # Copy modified files to existing /
 cp -f /conf/base/etc/newsyslog.conf /etc/
