@@ -12,6 +12,11 @@ your server without having to setup a remote syslog server.
 Typically, you will want to change the logging directory to somewhere on a
 dataset.
 
+Please note that running this script will change the way the restore factory
+default function works.  However, if you run the --reset option of this script
+then it will restore the original factory default filesystem.  Also, note that
+the script makes a backup of the configuration files that it changes.
+
 
 Usage
 ----------
