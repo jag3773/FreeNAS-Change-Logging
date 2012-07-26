@@ -24,7 +24,9 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 
 PROGNAME="${0##*/}"
-USAGE="Call the program like this: $PROGNAME -d <New_Log_Directory>"
+USAGE="Call the program like this:
+'$PROGNAME -d <New_Log_Directory>' to change logging location, or
+'$PROGNAME -r' to reset to factory default."
 
 echo
 echo "This script will modify newsyslog.conf, syslog.conf and periodic.conf."
@@ -49,6 +51,10 @@ while test -n "$1"; do
       LOGDIR=$2
       shift
       ;;
+    --reset|-r)
+      RESET="TRUE"
+      shift
+      ;;
     *)
       echo "Unknown argument: $1"
       echo $USAGE
@@ -58,11 +64,30 @@ while test -n "$1"; do
   shift
 done
 
-echo "Mounting / as writable..."
+# Mount / as writable
 mount -uw /
 
+if [ "$RESET" == "TRUE" ]; then
+  echo "Resetting to defaults..."
+  /etc/rc.d/syslogd stop
+  cp -f /conf/base/etc/newsyslog.conf.orig /conf/base/etc/newsyslog.conf
+  cp -f /conf/base/etc/newsyslog.conf /etc/
+  cp -f /conf/base/etc/syslog.conf.orig /conf/base/etc/syslog.conf
+  cp -f /conf/base/etc/syslog.conf /etc/
+  cp -f /conf/base/etc/periodic.conf.orig /conf/base/etc/periodic.conf
+  cp -f /conf/base/etc/periodic.conf /etc/
+  rm -f /conf/base/var/log
+  cp -a -f /conf/base/var/log.orig /conf/base/var/log
+  rm -f /var/log
+  cp -a -f /conf/base/var/log /var/
+  /etc/rc.d/syslogd start
+  mount -ur /
+  echo
+  echo "Logging environment returned to factory default."
+  exit 0
+fi
+
 # Verify logging directory exists, if not, create it
-echo "Checking for $LOGDIR..."
 test -d "$LOGDIR"  || mkdir "$LOGDIR"
 
 echo "Making changes to configuration files..."
@@ -92,6 +117,7 @@ cp -f /conf/base/etc/periodic.conf /etc/
 echo "Copying existing log files to new log directory, answer no to any file"
 echo "that you do not want to overwrite..."
 cp -ai /var/log/* "$LOGDIR/"
+cp -af /conf/base/var/log /conf/base/var/log.orig
 
 # Link /var/log to $LOGDIR
 rm -rf /var/log
@@ -102,9 +128,9 @@ ln -s "$LOGDIR" /conf/base/var/log
 # Start syslogd
 /etc/rc.d/syslogd start
 
-# Remount / as read only
-echo "Mounting / as read only..."
+# Mount / as read only
 mount -ur /
 
+echo
 echo "Logging successfully redirected to $LOGDIR."
 echo "You may want to reboot to verify that the changes persist."
