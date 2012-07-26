@@ -88,7 +88,6 @@ echo "This script assumes that logging is currently set to /var/log, which is"
 echo "the default location."
 echo "This script will also remove /var/log and make /var/log a symlink to the"
 echo "directory that you provide."
-echo .
 echo -n "Would you like to continue? (y/n) "
 read -e CONTINUE
 test "$CONTINUE" != "y" && exit 1
