@@ -65,16 +65,16 @@ if [ "$RESET" == "TRUE" ]; then
   read -e RESETCONTINUE
   test "$RESETCONTINUE" != "y" && exit 1
   /etc/rc.d/syslogd stop
-  cp -f /conf/base/etc/newsyslog.conf.orig /conf/base/etc/newsyslog.conf
-  cp -f /conf/base/etc/newsyslog.conf /etc/
-  cp -f /conf/base/etc/syslog.conf.orig /conf/base/etc/syslog.conf
-  cp -f /conf/base/etc/syslog.conf /etc/
-  cp -f /conf/base/etc/periodic.conf.orig /conf/base/etc/periodic.conf
-  cp -f /conf/base/etc/periodic.conf /etc/
+  cp -v -f /conf/base/etc/newsyslog.conf.orig /conf/base/etc/newsyslog.conf
+  cp -v -f /conf/base/etc/newsyslog.conf /etc/
+  cp -v -f /conf/base/etc/syslog.conf.orig /conf/base/etc/syslog.conf
+  cp -v -f /conf/base/etc/syslog.conf /etc/
+  cp -v -f /conf/base/etc/periodic.conf.orig /conf/base/etc/periodic.conf
+  cp -v -f /conf/base/etc/periodic.conf /etc/
   rm -f /conf/base/var/log
-  cp -a -f /conf/base/var/log.orig /conf/base/var/log
-  rm -f /var/log
-  cp -a -f /conf/base/var/log /var/
+  cp -v -a -f /conf/base/var/log.orig /conf/base/var/log
+  rm -v -f /var/log
+  cp -v -a -f /conf/base/var/log /var/
   /etc/rc.d/syslogd start
   mount -ur /
   echo
@@ -100,7 +100,7 @@ echo "Making changes to configuration files..."
 /etc/rc.d/syslogd stop
 
 # Modify appropriate files for logging
-cp /conf/base/etc/periodic.conf /conf/base/etc/periodic.conf.orig
+cp -v /conf/base/etc/periodic.conf /conf/base/etc/periodic.conf.orig
 /usr/bin/grep "daily.log" /conf/base/etc/periodic.conf || \
 printf "daily_output=\"$LOGDIR/daily.log\"\n" >> /conf/base/etc/periodic.conf
 /usr/bin/grep "weekly.log" /conf/base/etc/periodic.conf || \
@@ -114,15 +114,15 @@ ESCAPEDDIR=`cat /tmp/escapedloggingdir`
 rm /tmp/escapedloggingdir
 
 # Copy modified files to existing /
-cp -f /conf/base/etc/newsyslog.conf /etc/
-cp -f /conf/base/etc/syslog.conf /etc/
-cp -f /conf/base/etc/periodic.conf /etc/
+cp -v -f /conf/base/etc/newsyslog.conf /etc/
+cp -v -f /conf/base/etc/syslog.conf /etc/
+cp -v -f /conf/base/etc/periodic.conf /etc/
 
 # Copy existing log files to $LOGDIR
 echo "Copying existing log files to new log directory, answer no to any file"
 echo "that you do not want to overwrite..."
-cp -ai /var/log/* "$LOGDIR/"
-cp -af /conf/base/var/log /conf/base/var/log.orig
+cp -v -a -i /var/log/* "$LOGDIR/"
+cp -v -a -f /conf/base/var/log /conf/base/var/log.orig
 
 # Link /var/log to $LOGDIR
 rm -rf /var/log
