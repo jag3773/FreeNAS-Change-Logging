@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #  Copyright (c) 2012, Jesse Griffin <jag3773@gmail.com>
 #  All rights reserved.
 #
@@ -28,6 +28,12 @@ USAGE="Call the program like this:
 '$PROGNAME -d <New_Log_Directory>' to change logging location, or
 '$PROGNAME -r' to reset to factory default."
 
+# Check for arguments
+if [ $# -lt 1 ]; then
+  echo $USAGE
+  exit 1
+fi
+
 echo
 echo "This script will modify newsyslog.conf, syslog.conf and periodic.conf."
 echo "This script assumes that logging is currently set to /var/log, which is"
@@ -40,11 +46,6 @@ read -e CONTINUE
 test "$CONTINUE" != "y" && exit 1
 
 # Grab logging directory variable from command line
-if [ $# -lt 1 ]; then
-  echo $USAGE
-  exit 1
-fi
-
 while test -n "$1"; do
   case "$1" in
     --directory|-d)
@@ -96,11 +97,11 @@ echo "Making changes to configuration files..."
 
 # Modify appropriate files for logging
 cp /conf/base/etc/periodic.conf /conf/base/etc/periodic.conf.orig
-/usr/bin/grep "daily.log" || \
+/usr/bin/grep "daily.log" /conf/base/etc/periodic.conf || \
 printf "daily_output=\"$LOGDIR/daily.log\"\n" >> /conf/base/etc/periodic.conf
-/usr/bin/grep "weekly.log" || \
+/usr/bin/grep "weekly.log" /conf/base/etc/periodic.conf || \
 printf "weekly_output=\"$LOGDIR/weekly.log\"\n" >> /conf/base/etc/periodic.conf
-/usr/bin/grep "monthly.log" || \
+/usr/bin/grep "monthly.log" /conf/base/etc/periodic.conf || \
 printf "monthly_output=\"$LOGDIR/monthly.log\"\n" >> /conf/base/etc/periodic.conf
 echo $LOGDIR | sed 's/\//\\\//g' > /tmp/escapedloggingdir
 ESCAPEDDIR=`cat /tmp/escapedloggingdir`
