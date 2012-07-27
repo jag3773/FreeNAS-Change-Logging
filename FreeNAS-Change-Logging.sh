@@ -101,12 +101,19 @@ echo "Making changes to configuration files..."
 
 # Modify appropriate files for logging
 cp -v /conf/base/etc/periodic.conf /conf/base/etc/periodic.conf.orig
+## Daily
 /usr/bin/grep "daily.log" /conf/base/etc/periodic.conf || \
 printf "daily_output=\"$LOGDIR/daily.log\"\n" >> /conf/base/etc/periodic.conf
+## Weekly
 /usr/bin/grep "weekly.log" /conf/base/etc/periodic.conf || \
 printf "weekly_output=\"$LOGDIR/weekly.log\"\n" >> /conf/base/etc/periodic.conf
+## Monthly
 /usr/bin/grep "monthly.log" /conf/base/etc/periodic.conf || \
 printf "monthly_output=\"$LOGDIR/monthly.log\"\n" >> /conf/base/etc/periodic.conf
+## Security
+/usr/bin/grep "security.log" /conf/base/etc/periodic.conf || \
+printf "daily_status_security_output=\"$LOGDIR/security.log\"\n" >> /conf/base/etc/periodic.conf
+## Actually changing logging directory
 echo $LOGDIR | sed 's/\//\\\//g' > /tmp/escapedloggingdir
 ESCAPEDDIR=`cat /tmp/escapedloggingdir`
 /usr/bin/sed -i.orig "s/\/var\/log/$ESCAPEDDIR/" /conf/base/etc/newsyslog.conf \
