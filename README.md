@@ -17,6 +17,21 @@ default function works.  However, if you run the --reset option of this script
 then it will restore the original factory default filesystem.  Also, note that
 the script makes a backup of the configuration files that it changes.
 
+Boot messages will likely not appear in the messages log anymore, since the
+persistent storage device is usually mounted toward the end of the boot
+process.  To see this messages on a running system you can always run `dmesg`.
+
+
+Files Modified
+----------
+
+The following files are modified by this script:
+
+    /conf/base/etc/newsyslog.conf
+    /conf/base/etc/periodic.conf
+    /conf/base/etc/syslog.conf
+
+Existing log files are also copied to the new log destination.
 
 Usage
 ----------
