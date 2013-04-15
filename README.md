@@ -33,12 +33,23 @@ The following files are modified by this script:
 
 Existing log files are also copied to the new log destination.
 
+
 Usage
 ----------
+
+Download the script and make it executable, you'll need to cd into a directory
+that is writable:
+
+    cd /mnt/tank0
+    fetch https://github.com/jag3773/FreeNAS-Change-Logging/blob/master/FreeNAS-Change-Logging.sh
+    chmod +x FreeNAS-Change-Logging.sh
 
 To change the location of the logging from /var/log (the default), run:
 
     ./FreeNAS-Change-Logging.sh -d <New_Log_Directory>
+
+NOTE: The script will create the logging directory you pass to it if it does
+not exist already.
 
 To revert back to the factory default (/var/log), run:
 
@@ -52,5 +63,3 @@ example:
     ./FreeNAS-Change-Logging.sh -r
     ./FreeNAS-Change-Logging.sh -d /mnt/tank0/log
 
-NOTE: The script will create the logging directory you pass to it if it does
-not exist already.
