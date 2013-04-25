@@ -41,7 +41,7 @@ Download the script and make it executable, you'll need to cd into a directory
 that is writable:
 
     cd /mnt/tank0
-    fetch https://github.com/jag3773/FreeNAS-Change-Logging/blob/master/FreeNAS-Change-Logging.sh
+    fetch https://raw.github.com/jag3773/FreeNAS-Change-Logging/master/FreeNAS-Change-Logging.sh
     chmod +x FreeNAS-Change-Logging.sh
 
 To change the location of the logging from /var/log (the default), run:
