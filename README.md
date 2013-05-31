@@ -55,6 +55,9 @@ To change the location of the logging from /var/log (the default), run:
 NOTE: The script will create the logging directory you pass to it if it does
 not exist already.
 
+Also, the script may take a while to run if you are booting off of a slow
+device (some USB thumb drives are pretty slow).
+
 To revert back to the factory default (/var/log), run:
 
     ./FreeNAS-Change-Logging.sh -r
