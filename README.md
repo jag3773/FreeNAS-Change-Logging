@@ -19,7 +19,7 @@ the script makes a backup of the configuration files that it changes.
 
 Boot messages will likely not appear in the messages log anymore, since the
 persistent storage device is usually mounted toward the end of the boot
-process.  To see this messages on a running system you can always run `dmesg`.
+process.  To see these messages on a running system you can always run `dmesg`.
 
 This script also disables the periodic emails that are enabled by default.
 The output of these scripts is redirected to your log directory, into
