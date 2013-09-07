@@ -77,3 +77,7 @@ example:
     ./FreeNAS-Change-Logging.sh -r
     ./FreeNAS-Change-Logging.sh -d /mnt/tank0/log
 
+Note: Some logs may continue writing to the old location, even after a reset,
+most notably, Nginx.  System process should start writing to the new location
+right away.  If you need to have other services update their logging location
+then you will need to restart those services or reboot the system.
