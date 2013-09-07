@@ -6,7 +6,7 @@ Overview
 ----------
 
 This script allows you to change the location of the logging on an existing
-FreeNAS 8 system.  This is helpful if you want to enable persistent logging on
+FreeNAS system.  This is helpful if you want to enable persistent logging on
 your server without having to setup a remote syslog server.
 
 Typically, you will want to change the logging directory to somewhere on a
@@ -23,7 +23,14 @@ process.  To see this messages on a running system you can always run `dmesg`.
 
 This script also disables the periodic emails that are enabled by default.
 The output of these scripts is redirected to your log directory, into
-daily.log and security.log.  This does *not* disable error emails.
+daily.log and security.log.  This does *not* disable error emails, assuming
+you have email configured properly.
+
+
+Compatibility
+----------
+
+The script has been tested and found to be working on FreeNAS 8 and 9.
 
 
 Files Modified
