@@ -23,7 +23,7 @@ process.  To see these messages on a running system you can always run `dmesg`.
 
 This script also disables the periodic emails that are enabled by default.
 The output of these scripts is redirected to your log directory, into
-daily.log and security.log.  This does *not* disable error emails, assuming
+daily.log and security.log.  This should *not* disable error emails, assuming
 you have email configured properly.
 
 
