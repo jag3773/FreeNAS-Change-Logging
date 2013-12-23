@@ -21,10 +21,12 @@ Boot messages will likely not appear in the messages log anymore, since the
 persistent storage device is usually mounted toward the end of the boot
 process.  To see these messages on a running system you can always run `dmesg`.
 
-This script also disables the periodic emails that are enabled by default.
-The output of these scripts is redirected to your log directory, into
-daily.log and security.log.  This should *not* disable error emails, assuming
-you have email configured properly.
+*Update*: The script no longer disables the daily emails set in
+periodic.conf since FreeNAS 9.2 now has those turned off by default (see the
+Release Notes: http://iso.cdn.freenas.org/9.2.0/RELEASE/ReleaseNotes).
+If you are setting up an older FreeNAS version, use the script from an
+older commit to have these disabled:
+https://raw.github.com/jag3773/FreeNAS-Change-Logging/fe0b06fa2605ae302b2fc7223252ebdc8f00794f/FreeNAS-Change-Logging.sh.
 
 
 Compatibility
@@ -39,7 +41,6 @@ Files Modified
 The following files are modified by this script:
 
     /conf/base/etc/newsyslog.conf
-    /conf/base/etc/periodic.conf
     /conf/base/etc/syslog.conf
 
 Existing log files are also copied to the new log destination.
