@@ -69,8 +69,6 @@ if [ "$RESET" == "TRUE" ]; then
   cp -v -f /conf/base/etc/newsyslog.conf /etc/
   cp -v -f /conf/base/etc/syslog.conf.orig /conf/base/etc/syslog.conf
   cp -v -f /conf/base/etc/syslog.conf /etc/
-  cp -v -f /conf/base/etc/periodic.conf.orig /conf/base/etc/periodic.conf
-  cp -v -f /conf/base/etc/periodic.conf /etc/
   rm -f /conf/base/var/log
   cp -v -a -f /conf/base/var/log.orig /conf/base/var/log
   rm -v -f /var/log
@@ -83,7 +81,7 @@ if [ "$RESET" == "TRUE" ]; then
 fi
 
 echo
-echo "This script will modify newsyslog.conf, syslog.conf and periodic.conf."
+echo "This script will modify newsyslog.conf and syslog.conf."
 echo "This script assumes that logging is currently set to /var/log, which is"
 echo "the default location."
 echo "This script will also remove /var/log and make /var/log a symlink to the"
@@ -100,20 +98,6 @@ echo "Making changes to configuration files..."
 /etc/rc.d/syslogd stop
 
 # Modify appropriate files for logging
-cp -v /conf/base/etc/periodic.conf /conf/base/etc/periodic.conf.orig
-## Daily
-/usr/bin/grep "daily.log" /conf/base/etc/periodic.conf || \
-printf "daily_output=\"$LOGDIR/daily.log\"\n" >> /conf/base/etc/periodic.conf
-## Weekly
-/usr/bin/grep "weekly.log" /conf/base/etc/periodic.conf || \
-printf "weekly_output=\"$LOGDIR/weekly.log\"\n" >> /conf/base/etc/periodic.conf
-## Monthly
-/usr/bin/grep "monthly.log" /conf/base/etc/periodic.conf || \
-printf "monthly_output=\"$LOGDIR/monthly.log\"\n" >> /conf/base/etc/periodic.conf
-## Security
-/usr/bin/grep "security.log" /conf/base/etc/periodic.conf || \
-printf "daily_status_security_output=\"$LOGDIR/security.log\"\n" >> /conf/base/etc/periodic.conf
-## Actually changing logging directory
 echo $LOGDIR | sed 's/\//\\\//g' > /tmp/escapedloggingdir
 ESCAPEDDIR=`cat /tmp/escapedloggingdir`
 /usr/bin/sed -i.orig "s/\/var\/log/$ESCAPEDDIR/" /conf/base/etc/newsyslog.conf \
@@ -123,7 +107,6 @@ rm /tmp/escapedloggingdir
 # Copy modified files to existing /
 cp -v -f /conf/base/etc/newsyslog.conf /etc/
 cp -v -f /conf/base/etc/syslog.conf /etc/
-cp -v -f /conf/base/etc/periodic.conf /etc/
 
 # Copy existing log files to $LOGDIR
 echo "Copying existing log files to new log directory, answer no to any file"
