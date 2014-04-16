@@ -34,6 +34,9 @@ Compatibility
 
 The script has been tested and found to be working on FreeNAS 8 and 9.
 
+*Update*: As of FreeNAS 9.2 I believe that the .system dataset receives
+logging by default.  Thus, the use of this script on 9.2+ is discouraged.
+
 
 Files Modified
 ----------
